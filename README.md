@@ -46,132 +46,172 @@ npm run dev
 ---
 
 ## 📌 **2. Routes API**
-
-### 📍 **2.1. CRUD des objets connectés**
-
-| Méthode  | Endpoint            | Description                            |
-|----------|---------------------|----------------------------------------|
-| **GET**  | `/api/devices`      | Récupérer la liste des objets connectés |
-| **POST** | `/api/devices`      | Ajouter un nouvel objet connecté      |
-| **PUT**  | `/api/devices/:id`  | Modifier un objet connecté            |
-| **DELETE** | `/api/devices/:id` | Supprimer un objet connecté          |
-
----
-
-## 📌 **3. Tests API avec Postman**
-
-### 🔍 **3.1. Récupérer tous les objets**
-1️⃣ Ouvrir **Postman**  
-2️⃣ **Nouvelle requête**  
-3️⃣ **Méthode** : `GET`  
-4️⃣ **URL** : `http://localhost:5000/api/devices`  
-5️⃣ **Cliquer sur "Send"**
-
-✅ **Réponse attendue** :
+### 📌 **1. Récupérer tous les appareils**
+**GET** `/api/devices/`  
+📥 **Exemple de réponse :**
 ```json
 [
-  {
-    "id": "123abc",
-    "name": "Lampe de salon",
-    "status": "on",
-    "type": "light",
-    "location": "Salon"
-  }
+    {
+        "id": "abc123",
+        "room": "salon",
+        "type": "lumiere",
+        "name": "lampadaire",
+        "status": "on"
+    },
+    {
+        "id": "xyz456",
+        "room": "chambre",
+        "type": "chauffage",
+        "name": "radiateur",
+        "status": "off"
+    }
 ]
 ```
 
 ---
 
-### ➕ **3.2. Ajouter un objet**
-1️⃣ **Méthode** : `POST`  
-2️⃣ **URL** : `http://localhost:5000/api/devices`  
-3️⃣ **Headers** :
-- `Content-Type`: `application/json`  
-  4️⃣ **Body** → **Raw** (format JSON) :
+### 📌 **2. Ajouter un appareil**
+**POST** `/api/devices/`  
+📥 **Données attendues :**
 ```json
 {
-  "name": "Ventilateur",
-  "status": "off",
-  "type": "fan",
-  "location": "Chambre"
+    "room": "SALON",
+    "type": "LUMIERE",
+    "name": "LAMPADAIRE",
+    "status": "ON"
 }
 ```
-5️⃣ **Cliquer sur "Send"**
-
-✅ **Réponse attendue** :
+📤 **Réponse :**
 ```json
 {
-  "id": "AZERTY123456",
-  "name": "Ventilateur",
-  "status": "off",
-  "type": "fan",
-  "location": "Chambre"
+    "id": "abc123",
+    "room": "salon",
+    "type": "lumiere",
+    "name": "lampadaire",
+    "status": "on"
+}
+```
+🛠️ **Remarque :** L'API convertit tout en **minuscules** 🔤
+
+---
+
+### 📌 **3. Mettre à jour un appareil**
+**PUT** `/api/devices/{id}`  
+📥 **Données attendues :**
+```json
+{
+    "room": "salon",
+    "type": "lumiere",
+    "name": "lampadaire",
+    "status": "off"
+}
+```
+📤 **Réponse :**
+```json
+{
+    "id": "abc123",
+    "room": "salon",
+    "type": "lumiere",
+    "name": "lampadaire",
+    "status": "off",
+    "message": "Mise à jour réussie !"
 }
 ```
 
 ---
 
-### ✏️ **3.3. Modifier un objet (`PUT`)**
-📌 **Remplacer `ID_DU_DEVICE` par un ID existant**
-
-1️⃣ **Méthode** : `PUT`  
-2️⃣ **URL** : `http://localhost:5000/api/devices/ID_DU_DEVICE`  
-3️⃣ **Headers** :
-- `Content-Type`: `application/json`  
-  4️⃣ **Body** → **Raw** (format JSON) :
+### 📌 **4. Supprimer un appareil**
+**DELETE** `/api/devices/{id}`  
+📤 **Réponse :**
 ```json
 {
-  "status": "on"
-}
-```
-5️⃣ **Cliquer sur "Send"**
-
-✅ **Réponse attendue** :
-```json
-{
-  "id": "ID_DU_DEVICE",
-  "status": "on",
-  "message": "Mise à jour réussie !"
+    "id": "abc123",
+    "message": "Suppression réussie !"
 }
 ```
 
 ---
 
-### ❌ **3.4. Supprimer un objet (`DELETE`)**
-📌 **Remplacer `ID_DU_DEVICE` par un ID existant**
-
-1️⃣ **Méthode** : `DELETE`  
-2️⃣ **URL** : `http://localhost:5000/api/devices/ID_DU_DEVICE`  
-3️⃣ **Cliquer sur "Send"**
-
-✅ **Réponse attendue** :
+## 🔥 **Envoyer une instruction via MQTT**
+**POST** `/api/devices/send-mqtt`  
+📥 **Données attendues :**
 ```json
 {
-  "id": "ID_DU_DEVICE",
-  "message": "Suppression réussie !"
+    "room": "SALON",
+    "type": "LUMIERE",
+    "name": "LAMPADAIRE",
+    "instruction": "Allumer"
+}
+```
+📤 **Réponse :**
+```json
+{
+    "success": true,
+    "message": "Instruction envoyée à lampadaire (salon - lumiere)"
+}
+```
+✅ **L'API vérifie si l'appareil existe avant d'envoyer l'instruction !**
+
+🛠️ **Sur MQTT (topic : `55Kh2gAE5xtKaG5Ph5d5/salon`)** :
+```json
+{
+    "type": "lumiere",
+    "name": "lampadaire",
+    "instruction": "Allumer",
+    "status": "on",
+    "timestamp": "2025-03-17T12:00:00.000Z"
 }
 ```
 
 ---
 
-## 📌 **4. Structure du Projet**
+## 🛠️ **Test avec Postman**
+
+### **1️⃣ Ajouter un appareil**
+- **Méthode** : `POST`
+- **URL** : `http://localhost:5000/api/devices/`
+- **Body (JSON)** :
+```json
+{
+    "room": "Cuisine",
+    "type": "LUMIERE",
+    "name": "Suspension",
+    "status": "OFF"
+}
 ```
-ynov-home-api/
-│── src/
-│   ├── config/
-│   │   ├── firebase.js       # Connexion à Firebase
-│   ├── routes/
-│   │   ├── devices.js        # Routes API
-│   ├── controllers/
-│   │   ├── devicesController.js # Logique des routes
-│   ├── models/
-│   │   ├── deviceModel.js    # Modèle Firestore
-│   ├── mqtt/
-│   │   ├── mqttClient.js     # Connexion MQTT (si utilisé)
-│   ├── app.js                # Configuration Express
-│── .env                      # Variables d'environnement
-│── server.js                 # Point d'entrée du serveur
-│── package.json
-│── firebase-adminsdk.json     # 🔥 Clé Firebase (NE PAS PARTAGER)
-│── README.md
+✅ **Vérification** : Faire un `GET /api/devices/` pour voir l'appareil ajouté.
+
+---
+
+### **2️⃣ Envoyer une instruction**
+- **Méthode** : `POST`
+- **URL** : `http://localhost:5000/api/devices/send-mqtt`
+- **Body (JSON)** :
+```json
+{
+    "room": "cuisine",
+    "type": "lumiere",
+    "name": "suspension",
+    "instruction": "Éteindre"
+}
 ```
+✅ **Vérification** : L'instruction apparaît dans **Mosquitto**.
+
+---
+
+## 🔗 **Technos utilisées**
+✅ **Node.js** (Express)  
+✅ **Firebase Firestore**  
+✅ **MQTT (Mosquitto)**  
+✅ **Postman** (tests)
+
+---
+
+## 🤝 **Contribuer**
+1. **Fork** le repo
+2. **Créer une branche** (`feature/amélioration`)
+3. **Faire un commit** (`git commit -m "Ajout d'une nouvelle fonctionnalité"`)
+4. **Push** (`git push origin feature/amélioration`)
+5. **Créer une PR**
+
+🎉 **Merci d'utiliser Ynov Home API !** 🚀

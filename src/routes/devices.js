@@ -1,11 +1,25 @@
 const express = require("express");
-const { getDevices, createDevice, updateDevice, deleteDevice } = require("../controllers/devicesController");
+const { getDevices, createDevice, updateDevice, deleteDevice, sendDeviceInstruction } = require("../controllers/devicesController");
+const { sendInstruction } = require("../mqtt/mqttClient");
 
 const router = express.Router();
 
 router.get("/", getDevices);
 router.post("/", createDevice);
+router.post("/send-mqtt", sendDeviceInstruction);
 router.put("/:id", updateDevice);
 router.delete("/:id", deleteDevice);
+
+router.post("/send-mqtt", (req, res) => {
+    const { room, type, name, instruction } = req.body;
+
+    if (!room || !type || !name || !instruction) {
+        return res.status(400).json({ error: "Données invalides : room, type, name et instruction sont requis." });
+    }
+
+    sendInstruction({ room, type, instruction });
+
+    res.json({ success: true, message: `Instruction envoyée : ${instruction} pour ${room}` });
+});
 
 module.exports = router;
