@@ -32,4 +32,26 @@ const findDevice = async (room, type, name) => {
     return { id: doc.id, ...doc.data() };
 };
 
-module.exports = { getAllDevices, addDevice, findDevice };
+const updateDeviceStatus = async (room, name, status) => {
+    try {
+        const devicesRef = db.collection("devices");
+        const querySnapshot = await devicesRef
+            .where("room", "==", room)
+            .where("name", "==", name)
+            .get();
+
+        if (querySnapshot.empty) {
+            console.error(`❌ Aucun appareil trouvé pour ${name} dans ${room}`);
+            return;
+        }
+
+        querySnapshot.forEach(async (doc) => {
+            await doc.ref.update({ status });
+            console.log(`✅ Statut mis à jour pour ${name} (${room}) -> ${status}`);
+        });
+    } catch (error) {
+        console.error("❌ Erreur lors de la mise à jour du statut dans Firestore", error);
+    }
+};
+
+module.exports = { getAllDevices, addDevice, findDevice, updateDeviceStatus };

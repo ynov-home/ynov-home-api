@@ -1,10 +1,11 @@
 const express = require("express");
-const { getDevices, createDevice, updateDevice, deleteDevice, sendDeviceInstruction } = require("../controllers/devicesController");
+const { getDevices, createDevice, updateDevice, deleteDevice, sendDeviceInstruction, getDeviceById } = require("../controllers/devicesController");
 const { sendInstruction } = require("../mqtt/mqttClient");
 
 const router = express.Router();
 
 router.get("/", getDevices);
+router.get("/:id", getDeviceById);
 router.post("/", createDevice);
 router.post("/send-mqtt", sendDeviceInstruction);
 router.put("/:id", updateDevice);

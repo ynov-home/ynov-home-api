@@ -11,6 +11,20 @@ const getDevices = async (req, res) => {
     }
 };
 
+const getDeviceById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const device = await db.collection("devices").doc(id).get();
+        if (!device.exists) {
+            return res.status(404).json({ error: "L'appareil n'existe pas." });
+        }
+
+        res.json({ id: device.id, ...device.data() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 const createDevice = async (req, res) => {
     try {
         let { room, type, name, status } = req.body;
@@ -89,4 +103,4 @@ const deleteDevice = async (req, res) => {
     }
 };
 
-module.exports = { getDevices, createDevice, sendDeviceInstruction, updateDevice, deleteDevice };
+module.exports = { getDevices, createDevice, sendDeviceInstruction, updateDevice, deleteDevice, getDeviceById };
