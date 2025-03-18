@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "c370461c-f339-463c-8661-21a9cd1236c0",
+		"name": "Hackathon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "43165781",
+		"_collection_link": "https://dark-capsule-914673.postman.co/workspace/Team-Workspace~b769205c-21fd-450e-8539-7f21bf892643/collection/43165781-c370461c-f339-463c-8661-21a9cd1236c0?action=share&source=collection_link&creator=43165781"
+	},
+	"item": [
+		{
+			"name": "put",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\": \"salon\",\r\n    \"type\": \"store\",\r\n    \"name\": \"baie-vitree\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/api/devices/hAozqcreWvIg1d6NJntr"
+			},
+			"response": []
+		},
+		{
+			"name": "post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\": \"salon\",\r\n    \"type\": \"store\",\r\n    \"name\": \"fenetre\",\r\n    \"status\": \"off\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/api/devices"
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5000/api/devices"
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:5000/api/devices/QjSpEItppeOrFg4mDCsT"
+			},
+			"response": []
+		},
+		{
+			"name": "send message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\": \"salon\",\r\n    \"type\": \"lumiere\",\r\n    \"name\": \"ilot central\",\r\n    \"instruction\": \"allumer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/api/devices/send-mqtt"
+			},
+			"response": []
+		},
+		{
+			"name": "commande vocale",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"command\": \"Eteint la lumiere de l'ilot centrale dans le salon\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/api/devices/voice-command"
+			},
+			"response": []
+		}
+	]
+}
