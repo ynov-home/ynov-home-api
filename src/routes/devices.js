@@ -1,8 +1,11 @@
 const express = require("express");
 const { getDevices, createDevice, updateDevice, deleteDevice, sendDeviceInstruction, getDeviceById } = require("../controllers/devicesController");
 const { sendInstruction } = require("../mqtt/mqttClient");
+const { processVoiceCommand } = require("../controllers/aiController");
 
 const router = express.Router();
+
+module.exports = router;
 
 router.get("/", getDevices);
 router.get("/:id", getDeviceById);
@@ -10,6 +13,7 @@ router.post("/", createDevice);
 router.post("/send-mqtt", sendDeviceInstruction);
 router.put("/:id", updateDevice);
 router.delete("/:id", deleteDevice);
+router.post("/voice-command", processVoiceCommand);
 
 router.post("/send-mqtt", (req, res) => {
     const { room, type, name, instruction } = req.body;

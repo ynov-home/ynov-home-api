@@ -9,9 +9,9 @@ const getAllDevices = async () => {
 
 const addDevice = async (device) => {
     const newDevice = {
-        room: device.room.toLowerCase(),
-        type: device.type.toLowerCase(),
-        name: device.name.toLowerCase(),
+        room: device.room.toLowerCase().replace(/\s+/g, '-'),
+        type: device.type.toLowerCase().replace(/\s+/g, '-'),
+        name: device.name.toLowerCase().replace(/\s+/g, '-'),
         status: device.status ? device.status.toLowerCase() : "off"
     };
 
@@ -20,15 +20,24 @@ const addDevice = async (device) => {
 };
 
 const findDevice = async (room, type, name) => {
+    const normalizedRoom = room.toLowerCase().replace(/\s+/g, '-');
+    const normalizedType = type.toLowerCase().replace(/\s+/g, '-');
+    const normalizedName = name.toLowerCase().replace(/\s+/g, '-');
+    console.log("🔍 Recherche de l'appareil :", normalizedRoom, normalizedType, normalizedName);
+
     const snapshot = await db.collection("devices")
-        .where("room", "==", room.toLowerCase())
-        .where("type", "==", type.toLowerCase())
-        .where("name", "==", name.toLowerCase())
+        .where("room", "==", normalizedRoom)
+        .where("type", "==", normalizedType)
+        .where("name", "==", normalizedName)
         .get();
 
-    if (snapshot.empty) return null;
+    if (snapshot.empty) {
+        console.log("❌ Aucun appareil trouvé.");
+        return null;
+    }
 
     const doc = snapshot.docs[0];
+    console.log("✅ Appareil trouvé :", doc.data());
     return { id: doc.id, ...doc.data() };
 };
 

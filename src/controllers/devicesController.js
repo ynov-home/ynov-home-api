@@ -78,9 +78,9 @@ const updateDevice = async (req, res) => {
             return res.status(400).json({ error: "room, type et name sont requis." });
         }
 
-        room = room.toLowerCase();
-        type = type.toLowerCase();
-        name = name.toLowerCase();
+        room = room.toLowerCase().replace(/\s+/g, '-');
+        type = type.toLowerCase().replace(/\s+/g, '-');
+        name = name.toLowerCase().replace(/\s+/g, '-');
         status = status ? status.toLowerCase() : "off";
 
         const updatedData = { room, type, name, status };

@@ -199,6 +199,52 @@ npm run dev
 
 ---
 
+### 📌 **5. Analyse de commande vocale avec IA**
+**POST** `/api/devices/voice-command`  
+📥 **Données attendues :**
+```json
+{
+    "command": "Éteins la lumière du salon"
+}
+```
+📤 **Réponse :**
+```json
+{
+    "success": true,
+    "command": {
+        "room": "salon",
+        "type": "lumiere",
+        "name": "lampadaire",
+        "instruction": "eteindre"
+    }
+}
+```
+🛠️ **Fonctionnement :**
+1. L'API reçoit une **commande vocale** sous forme de texte.
+2. L'IA (OpenAI GPT-4) analyse la phrase et en extrait les informations essentielles (`room`, `type`, `name`, `instruction`).
+3. La commande est ensuite envoyée au **broker MQTT** pour exécution.
+
+✅ **Exemple de test avec Postman** :
+- **Méthode** : `POST`
+- **URL** : `http://localhost:5000/api/devices/voice-command`
+- **Body (JSON)** :
+```json
+{
+    "command": "Ouvre la porte d'entrée"
+}
+```
+✅ **Attendu sur MQTT (topic : `devices/porte`)** :
+```json
+{
+    "room": "entrée",
+    "type": "porte",
+    "name": "porte principale",
+    "instruction": "ouvrir"
+}
+```
+
+---  
+
 ## 🔗 **Technos utilisées**
 ✅ **Node.js** (Express)  
 ✅ **Firebase Firestore**  
@@ -206,12 +252,3 @@ npm run dev
 ✅ **Postman** (tests)
 
 ---
-
-## 🤝 **Contribuer**
-1. **Fork** le repo
-2. **Créer une branche** (`feature/amélioration`)
-3. **Faire un commit** (`git commit -m "Ajout d'une nouvelle fonctionnalité"`)
-4. **Push** (`git push origin feature/amélioration`)
-5. **Créer une PR**
-
-🎉 **Merci d'utiliser Ynov Home API !** 🚀
