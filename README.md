@@ -36,14 +36,17 @@ npm install
 FIREBASE_DATABASE_URL=
 PORT=5000
 OPENAI_API_KEY=
-MQTT_BROKER="mqtt://test.mosquitto.org" // Broker public. A modifier en fonction de l'installation
 ```
+
+**Dans /src/mqtt/mqttClient.js à la ligne 5, adapter avec votre propre ip local sur laquelle tourne MQTT EXPLORER.**
 
 ### ▶️ **1.5. Démarrer l'API**
 ```sh
 npm run dev
 ```
 📌 **L'API tourne sur `http://localhost:5000`**
+
+📌 **Le fichier `Hackathon.postman_collection.json` vous permettra de tester l'api sur postman**
 
 ---
 
@@ -135,6 +138,8 @@ npm run dev
 ---
 
 ## 🔥 **Envoyer une instruction via MQTT**
+**S'assurer d'avoir fait les installations IOT pour cela (https://github.com/ynov-home/ynov-home-iot)**
+
 **POST** `/api/devices/send-mqtt`  
 📥 **Données attendues :**
 ```json

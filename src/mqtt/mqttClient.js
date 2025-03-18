@@ -1,8 +1,7 @@
-require("dotenv").config();
-const mqtt = require("mqtt");const mqtt = require("mqtt");
+const mqtt = require("mqtt");
 const { updateDeviceStatus } = require("../models/deviceModel");
 
-const MQTT_BROKER = process.env.MQTT_BROKER_URL;
+const MQTT_BROKER = "mqtt://10.70.4.114:1883"; // Broker local. A modifier en fonction de l'installation
 
 const client = mqtt.connect(MQTT_BROKER);
 
