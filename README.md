@@ -31,10 +31,12 @@ npm install
 - Cliquer sur **Générer une nouvelle clé privée**
 - Placer le fichier **`firebase-adminsdk.json`** dans la racine du projet
 
-4️⃣ **Créer un fichier `.env`** et ajouter :
+4️⃣ **Créer un fichier `.env`** à partir du `.env.exemple` et le completer.
 ```env
+FIREBASE_DATABASE_URL=
 PORT=5000
-FIREBASE_DATABASE_URL=https://ton-projet-firebase.firebaseio.com
+OPENAI_API_KEY=
+MQTT_BROKER="mqtt://test.mosquitto.org" // Broker public. A modifier en fonction de l'installation
 ```
 
 ### ▶️ **1.5. Démarrer l'API**
